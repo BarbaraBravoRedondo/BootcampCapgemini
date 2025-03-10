@@ -1,19 +1,15 @@
 package com.example.ioc;
 
-import org.springframework.stereotype.Repository;
-import org.springframework.context.annotation.Primary;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Repository;
 
-
-@Repository
-@Qualifier("mentira")
-@Primary
+//@Qualifier("mentira")
+//@Repository
+//@Primary
 public class RepositorioImplMock implements Repositorio {
-	public RepositorioImplMock(Configuracion config) {
-		// TODO Auto-generated constructor stub
-	}
 	@Override
 	public void guardar() {
-		System.err.println("Guardando fake");
+		System.err.println("Guardando de mentira");
 	}
 }
