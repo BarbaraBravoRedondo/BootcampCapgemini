@@ -43,7 +43,7 @@ class GildedRose {
     }
 
     public void updateBackstagePasses(Item item) {
-        if (Caducado(item)) {
+        if (caducado(item)) {
             item.quality = 0;
         } else {
             if (item.quality < 50) {
@@ -62,21 +62,21 @@ class GildedRose {
         int degradeAmount = (item.sellIn < 0) ? 4 : 2;
         item.quality -= degradeAmount;
 
-        if (Caducado(item)) {
+        if (caducado(item)) {
             item.quality = 0;
         }
     }
 
     public void updateDefaultItem(Item item) {
         int degradeAmount = (item.sellIn < 0) ? 2 : 1;
-        if (Caducado(item)) {
+        if (caducado(item)) {
             item.quality -= degradeAmount;
           
             
         }
     }
 
-	private boolean Caducado(Item item) {
+	private boolean caducado(Item item) {
 		return item.quality > 0;
 	}
 
