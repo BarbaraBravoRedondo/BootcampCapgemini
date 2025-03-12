@@ -71,6 +71,8 @@ class GildedRose {
         int degradeAmount = (item.sellIn < 0) ? 2 : 1;
         if (Caducado(item)) {
             item.quality -= degradeAmount;
+          
+            
         }
     }
 
