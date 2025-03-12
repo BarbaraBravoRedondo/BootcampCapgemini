@@ -9,63 +9,79 @@ class GildedRose {
 
     public void updateQuality() {
         for (int i = 0; i < items.length; i++) {
-            if (!items[i].name.equals("Aged Brie")
-                    && !items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                if (items[i].quality > 0) {
-                    if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                        items[i].quality = items[i].quality - 1;
-                    }
+            applyExpiredItem(items[i]);
+            updateSellIn(items[i]);
+        }
+    }
+
+    public void applyExpiredItem(Item item) {
+        switch (item.name) {
+            case "Aged Brie":
+                updateAgedBrie(item);
+                break;
+            case "Backstage passes to a TAFKAL80ETC concert":
+                updateBackstagePasses(item);
+                break;
+            case "Conjured Mana Cake":
+                updateConjuredManaCake(item);
+                break;
+            case "Sulfuras, Hand of Ragnaros":
+                break;
+            default:
+                updateDefaultItem(item);
+                break;
+        }
+    }
+
+    public void updateAgedBrie(Item item) {
+        if (item.quality < 50) {
+            item.quality++;
+        }
+        if (item.sellIn < 0 && item.quality < 50) {
+            item.quality++;
+        }
+    }
+
+    public void updateBackstagePasses(Item item) {
+        if (Caducado(item)) {
+            item.quality = 0;
+        } else {
+            if (item.quality < 50) {
+                item.quality++;
+                if (item.sellIn < 11 && item.quality < 50) {
+                    item.quality++;
                 }
-            } else {
-                if (items[i].quality < 50) {
-                    items[i].quality = items[i].quality + 1;
-
-                    if (items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (items[i].sellIn < 11) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-
-                        if (items[i].sellIn < 6) {
-                            if (items[i].quality < 50) {
-                                items[i].quality = items[i].quality + 1;
-                            }
-                        }
-                    }
-                }
-            }
-
-            if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                items[i].sellIn = items[i].sellIn - 1;
-            }
-
-            if (items[i].sellIn < 0) {
-                if (!items[i].name.equals("Aged Brie")) {
-                    if (!items[i].name.equals("Backstage passes to a TAFKAL80ETC concert")) {
-                        if (items[i].quality > 0) {
-                            if (!items[i].name.equals("Sulfuras, Hand of Ragnaros")) {
-                                items[i].quality = items[i].quality - 1;
-                            }
-                        }
-                    } else {
-                        items[i].quality = items[i].quality - items[i].quality;
-                    }
-                } else {
-                    if (items[i].quality < 50) {
-                        items[i].quality = items[i].quality + 1;
-                    }
-                }
-
-                if (items[i].name.equals("Conjured Mana Cake")) {
-                    int degradeAmount = (items[i].sellIn < 0) ? 4 : 2;
-                    items[i].quality -= degradeAmount;
-
-                    if (items[i].quality < 0) {
-                        items[i].quality = 0;
-                    }
+                if (item.sellIn < 6 && item.quality < 50) {
+                    item.quality++;
                 }
             }
         }
     }
-}
+
+    public void updateConjuredManaCake(Item item) {
+        int degradeAmount = (item.sellIn < 0) ? 4 : 2;
+        item.quality -= degradeAmount;
+
+        if (Caducado(item)) {
+            item.quality = 0;
+        }
+    }
+
+    public void updateDefaultItem(Item item) {
+        int degradeAmount = (item.sellIn < 0) ? 2 : 1;
+        if (Caducado(item)) {
+            item.quality -= degradeAmount;
+        }
+    }
+
+	private boolean Caducado(Item item) {
+		return item.quality > 0;
+	}
+
+    public void updateSellIn(Item item) {
+    	
+    	    if (!item.name.equals("Sulfuras, Hand of Ragnaros")) {
+    	        item.sellIn--;
+    	    }
+    	   
+}}
