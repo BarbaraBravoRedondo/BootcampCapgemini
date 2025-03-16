@@ -30,7 +30,8 @@ public class CatalogoApplication implements CommandLineRunner {
 	
 	@Autowired
 	private ActoresService srv;
-//	private ActoresRepository dao;
+   
+	private ActoresRepository dao;
 	private void ejemplosDatos() {
 		//var actor = new Actor(0,"Pepito","Grillo");
 //		var item =dao.findById(204);
@@ -46,16 +47,22 @@ public class CatalogoApplication implements CommandLineRunner {
 //		dao.findTop5ByFirstNameStartingWithOrderByLastNameDesc("P").forEach(System.err::println);
 //		dao.findAll((root, query, builder) -> builder.lessThanOrEqualTo(root.get("actorId"), 5))
 //		   .forEach(System.err::println);
-		srv.getAll().forEach(System.err::println);
-		var item =srv.getOne(1);
-		if(item.isPresent()) {
-			var actor =item.get();
-		System.err.println(item +"\nPeliculas");
-		//actor.getFilmActors().forEach(fa -> System.err.println(fa.getFilm().getTitle()));
-		}
-		else {
-		System.err.println("Nose ha encontrado al actor");
-		}}
+		 var actor = new Actor(0, "Pepito", "12345678Z");
+ 		 if(actor.isValid())
+ 			 dao.save(actor);
+ 		 else {
+ 			System.err.println(actor.getErrorsMessage());}
+ 		}
+//		srv.getAll().forEach(System.err::println);
+//		var item =srv.getOne(1);
+//		if(item.isPresent()) {
+//			var actor =item.get();
+//		System.err.println(item +"\nPeliculas");
+//		//actor.getFilmActors().forEach(fa -> System.err.println(fa.getFilm().getTitle()));
+//		}
+//		else {
+//		System.err.println("Nose ha encontrado al actor");
+//		}}
 	
 	@Override
 	@Transactional

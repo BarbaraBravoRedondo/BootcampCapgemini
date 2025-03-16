@@ -42,6 +42,9 @@ public class ActoresServiceImpl implements ActoresService {
 	public Actor modify(Actor item) throws NotFoundException, InvalidDataException {
 	if (item ==null || item.getActorId() == 0){
 		 throw new InvalidDataException ("Actor inválido o con ID incorrecto");}
+	if(item.isInvalid()) {
+			throw new InvalidDataException(item.getErrorsMessage());
+		}
 	 if (!dao.existsById(item.getActorId())) {
          throw new NotFoundException("Actor no encontrado con ID: " + item.getActorId());
      }
