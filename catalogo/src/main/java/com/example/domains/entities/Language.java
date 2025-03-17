@@ -11,6 +11,13 @@ import jakarta.validation.constraints.Size;
 
 import java.sql.Timestamp;
 import java.util.List;
+import java.util.Objects;
+
+import com.example.domains.core.entities.AbstractEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 
 
 /**
@@ -20,27 +27,35 @@ import java.util.List;
 @Entity
 @Table(name="language")
 @NamedQuery(name="Language.findAll", query="SELECT l FROM Language l")
-public class Language implements Serializable {
+public class Language  extends AbstractEntity<Language> implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
+	   public static class Partial {}
+	   public static class Complete extends Partial {}
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="language_id", insertable=false, updatable=false, unique=true, nullable=false)
+	@Column(name="language_id")
+	@JsonProperty("id")
+	@JsonView(Language.Partial.class)
 	@Positive
 	private int languageId;
 
-	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
-	@PastOrPresent
-	private Timestamp lastUpdate;
+	@Column(name="last_update", insertable = false, updatable = false)
+ 	@JsonView(Language.Complete.class)
+ 	@JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh:mm:ss")
+ 	@JsonProperty("ultimaModificacion")
+ 	private Timestamp lastUpdate;
 
-	@Column(nullable=false, length=20)
 	@NotBlank
-	@Size(min = 3, max = 20, message = "El nombre debe tener entre 3 y 20 caracteres.")
-	@Pattern(regexp = "^[A-Za-z0-9ÁáÉéÍíÓóÚúÑñ ]*$", message = "El título solo puede contener letras, numeros y espacios. No se permiten caracteres especiales.")
+ 	@Size(max=20)
+ 	@JsonProperty("idioma")
+ 	@JsonView(Language.Partial.class)
 	private String name;
 
 	//bi-directional many-to-one association to Film
 	@OneToMany(mappedBy="language")
+	@JsonIgnore
 	@NotNull(message = "La lista de películas no puede ser nula.")
 	private List<Film> films;
 
@@ -51,6 +66,14 @@ public class Language implements Serializable {
 
 	public Language() {
 	}
+	public Language(int languageId) {
+ 		this.languageId = languageId;
+ 	}
+ 
+ 	public Language(int languageId, @NotBlank @Size(max = 20) String name) {
+ 		this.languageId = languageId;
+ 		this.name = name;
+ 	}
 
 	public int getLanguageId() {
 		return this.languageId;
@@ -119,5 +142,25 @@ public class Language implements Serializable {
 
 		return filmsVO;
 	}
+	@Override
+ 	public int hashCode() {
+ 		return Objects.hash(languageId);
+ 	}
+ 
+ 	@Override
+ 	public boolean equals(Object obj) {
+ 		if (this == obj)
+ 			return true;
+ 		if (obj instanceof Language o)
+ 			return languageId == o.languageId;
+ 		else
+ 			return false;
+ 	}
+ 	
+ 	@Override
+ 	public String toString() {
+ 		return "Language [languageId=" + languageId + ", name=" + name + "]";
+ 	}
+ 
 
 }

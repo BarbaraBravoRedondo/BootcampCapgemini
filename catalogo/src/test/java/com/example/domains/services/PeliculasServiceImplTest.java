@@ -32,7 +32,7 @@ public class PeliculasServiceImplTest {
     }
 
     @Test
-    @DisplayName("Test traer todas las películas")
+    @DisplayName("Test traer todas las peliculas")
     void testGetAll() {
     	Film film1 = new Film(1, "La Casa de Papel", "Acción");
     	Film film2 = new Film(2, "Titanic", "Romántica");

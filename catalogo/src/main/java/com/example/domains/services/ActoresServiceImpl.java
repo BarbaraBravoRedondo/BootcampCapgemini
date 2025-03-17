@@ -19,6 +19,7 @@ public class ActoresServiceImpl implements ActoresService {
 	public ActoresServiceImpl(ActoresRepository dao) {
 		this.dao = dao;
 	}
+	
 
 	@Override
 	public List<Actor> getAll() {
