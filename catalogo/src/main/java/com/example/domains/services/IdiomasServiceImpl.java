@@ -30,18 +30,20 @@ public class IdiomasServiceImpl implements IdiomasService {
 		return dao.findById(id);
 	}
 
-	@Override
 	public Language add(Language item) throws DuplicateKeyException, InvalidDataException {
-		if(item == null) {
-			throw new InvalidDataException("El actor no puede ser nulo");
-		}
-		return null;
-}
+	    if(item == null) {
+	        throw new InvalidDataException("El idioma no puede ser nulo");
+	    }
+	    if (dao.existsById(item.getLanguageId())) {
+	        throw new DuplicateKeyException("Idioma ya existe con el ID: " + item.getLanguageId());
+	    }
+	    return dao.save(item);
+	}
 
 	@Override
 	public Language modify(Language item) throws NotFoundException, InvalidDataException {
 	if (item ==null || item.getLanguageId() == 0){
-		 throw new InvalidDataException ("Actor inválido o con ID incorrecto");}	 if (!dao.existsById(item.getLanguageId())) {        throw new NotFoundException("Actor no encontrado con ID: " + item.getLanguageId());
+		 throw new InvalidDataException ("Idioma invalido o con ID incorrecto");}	 if (!dao.existsById(item.getLanguageId())) {        throw new NotFoundException("Actor no encontrado con ID: " + item.getLanguageId());
     }
     return dao.save(item);
 	
@@ -50,7 +52,7 @@ public class IdiomasServiceImpl implements IdiomasService {
 	@Override
 	public void delete(Language item) throws InvalidDataException {
 	  if (item == null || item.getLanguageId() == 0) {
-	            throw new InvalidDataException("Actor no econtrado o con ID incorrecto");
+	            throw new InvalidDataException("Idioma no econtrado o con ID incorrecto");
 	        }
 	        dao.delete(item);
 

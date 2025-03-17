@@ -45,8 +45,13 @@ public class Category implements Serializable {
 	@OneToMany(mappedBy="category")
 	private List<FilmCategory> filmCategories;
 
-	public Category() {
+	
+	public Category(int categoryId, String name) {
+		this.categoryId = categoryId;
+		this.name = name;
 	}
+
+	
 
 	public int getCategoryId() {
 		return this.categoryId;

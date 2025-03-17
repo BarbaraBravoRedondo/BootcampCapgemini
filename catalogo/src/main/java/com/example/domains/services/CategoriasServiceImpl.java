@@ -14,54 +14,54 @@ import com.example.exceptions.NotFoundException;
 
 @Service
 public class CategoriasServiceImpl implements CategoriasService {
-	private CategoriasRepository dao;
-	
-	public CategoriasServiceImpl(CategoriasRepository dao) {
-		this.dao = dao;
-	}
+    private CategoriasRepository dao;
 
-	@Override
-	public List<Category> getAll() {
-		return dao.findAll();
-	}
+    public CategoriasServiceImpl(CategoriasRepository dao) {
+        this.dao = dao;
+    }
 
-	@Override
-	public Optional<Category> getOne(Integer id) {
-		return dao.findById(id);
-	}
+    @Override
+    public List<Category> getAll() {
+        return dao.findAll();
+    }
 
-	@Override
-	public Category add(Category item) throws DuplicateKeyException, InvalidDataException {
-		if(item == null) {
-			throw new InvalidDataException("El actor no puede ser nulo");
-		}
-		return null;
-	}
+    @Override
+    public Optional<Category> getOne(Integer id) {
+        return dao.findById(id);
+    }
 
-	@Override
-	public Category modify(Category item) throws NotFoundException, InvalidDataException {
-	if (item ==null || item.getCategoryId() == 0){
-		 throw new InvalidDataException ("Actor inválido o con ID incorrecto");}
-	 if (!dao.existsById(item.getCategoryId())) {
-         throw new NotFoundException("Actor no encontrado con ID: " + item.getCategoryId());
-     }
-     return dao.save(item);
-		
-	}
-	@Override
-	public void delete(Category item) throws InvalidDataException {
-		  if (item == null || item.getCategoryId() == 0) {
-	            throw new InvalidDataException("Actor no econtrado o con ID incorrecto");
-	        }
-	        dao.delete(item);
+    @Override
+    public Category add(Category item) throws DuplicateKeyException, InvalidDataException {
+        if (item == null) {
+            throw new InvalidDataException("La categoría no puede ser nula");
+        }
+        if (dao.existsById(item.getCategoryId())) {
+            throw new DuplicateKeyException("Categoría ya existe con el ID: " + item.getCategoryId());
+        }
+        return dao.save(item);
+    }
 
-	}
-	
-	@Override
+    @Override
+    public Category modify(Category item) throws NotFoundException, InvalidDataException {
+        if (item == null || item.getCategoryId() == 0) {
+            throw new InvalidDataException("Categoría inválida o con ID incorrecto");
+        }
+        if (!dao.existsById(item.getCategoryId())) {
+            throw new NotFoundException("Categoría no encontrada con ID: " + item.getCategoryId());
+        }
+        return dao.save(item);
+    }
+
+    @Override
+    public void delete(Category item) throws InvalidDataException {
+        if (item == null || item.getCategoryId() == 0) {
+            throw new InvalidDataException("Categoría no encontrada o con ID incorrecto");
+        }
+        dao.delete(item);
+    }
+
+    @Override
     public void deleteById(Integer id) {
-      
-
-        dao.deleteById(id);  }
-	
-
+        dao.deleteById(id);
+    }
 }

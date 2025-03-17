@@ -99,7 +99,10 @@ public class Film implements Serializable {
 //	@OneToMany(mappedBy="film")
 //	private List<Inventory> inventories;
 
-	public Film() {
+	public Film(int filmId, String title, String description) {
+		 this.filmId = filmId;
+		    this.title = title;
+		    this.description = description;
 	}
 
 	public int getFilmId() {

@@ -35,21 +35,27 @@ public class ActoresServiceImpl implements ActoresService {
 		if(item == null) {
 			throw new InvalidDataException("El actor no puede ser nulo");
 		}
+		 if (dao.existsById(item.getActorId())) {
+		        throw new DuplicateKeyException("Actor con ID " + item.getActorId() + " ya existe.");
+		    }
+		
 		return null;
 	}
 
 	@Override
 	public Actor modify(Actor item) throws NotFoundException, InvalidDataException {
-	if (item ==null || item.getActorId() == 0){
-		 throw new InvalidDataException ("Actor inválido o con ID incorrecto");}
-	if(item.isInvalid()) {
-			throw new InvalidDataException(item.getErrorsMessage());
-		}
-	 if (!dao.existsById(item.getActorId())) {
-         throw new NotFoundException("Actor no encontrado con ID: " + item.getActorId());
-     }
-     return dao.save(item);
-		
+	   
+	    if (item == null || item.getActorId() == 0) {
+	        throw new InvalidDataException("Actor inválido o con ID incorrecto");
+	    }
+	    if (!dao.existsById(item.getActorId())) {
+	        throw new NotFoundException("Actor no encontrado con ID: " + item.getActorId());
+	    }
+	 
+	    if (item.isInvalid()) {
+	        throw new InvalidDataException(item.getErrorsMessage());
+	    }
+	    return dao.save(item);
 	}
 
 	@Override
