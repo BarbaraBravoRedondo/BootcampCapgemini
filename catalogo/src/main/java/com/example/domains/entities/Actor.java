@@ -6,6 +6,7 @@ import java.sql.Timestamp;
 import java.util.List;
 import java.util.Objects;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.PastOrPresent;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -30,13 +31,14 @@ public class Actor  extends AbstractEntity<Actor> implements Serializable{
 	@Column(name="first_name", nullable=false, length=45)
  	@NotBlank
  	@Size(max = 45, min = 2)
- 	@Pattern(regexp = "^[A-Z]*$", message = "El nombre debe estar en mayúsculas")
+ 	@Pattern(regexp = "^[A-Za-zÁÉÍÓÚÑáéíóúñ\\s]+$", message = "El nombre debe estar en mayúsculas")
 	private String firstName;
-	 
+	
+	@Pattern(regexp = "^[A-Za-zÁÉÍÓÚÑáéíóúñ]+$", message = "El apellido debe estar en mayúsculas")
  	@Column(name="last_name", nullable=false, length=45)
  	@NotBlank
  	@Size(max = 45, min = 2)
- 	@NIF
+
  	private String lastName;
  
  	@Column(name="last_update", insertable=false, updatable=false, nullable=false)

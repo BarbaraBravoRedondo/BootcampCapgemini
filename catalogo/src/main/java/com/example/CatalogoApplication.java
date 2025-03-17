@@ -30,8 +30,9 @@ public class CatalogoApplication implements CommandLineRunner {
 	
 	@Autowired
 	private ActoresService srv;
+	@Autowired
    
-	private ActoresRepository dao;
+private ActoresRepository dao;
 	private void ejemplosDatos() {
 		//var actor = new Actor(0,"Pepito","Grillo");
 //		var item =dao.findById(204);
@@ -47,7 +48,7 @@ public class CatalogoApplication implements CommandLineRunner {
 //		dao.findTop5ByFirstNameStartingWithOrderByLastNameDesc("P").forEach(System.err::println);
 //		dao.findAll((root, query, builder) -> builder.lessThanOrEqualTo(root.get("actorId"), 5))
 //		   .forEach(System.err::println);
-		 var actor = new Actor(0, "Pepito", "12345678Z");
+		 var actor = new Actor(0, "PEPITO","CaANOVA");
  		 if(actor.isValid())
  			 dao.save(actor);
  		 else {

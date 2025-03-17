@@ -2,6 +2,13 @@ package com.example.domains.entities;
 
 import java.io.Serializable;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PastOrPresent;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.Size;
+
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -18,13 +25,20 @@ public class Category implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@NotBlank
+	@NotNull(message = "El ID de la categoria no puede ser nulo.")
+	@Positive(message = "El ID de la categoria debe ser positivo.")
 	@Column(name="category_id", unique=true, nullable=false)
 	private int categoryId;
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
+	@PastOrPresent
 	private Timestamp lastUpdate;
 
 	@Column(nullable=false, length=25)
+	@NotBlank(message = "El nombre de la categoria no puede estar vacío.")
+	@Size(min = 2, max = 25, message = "El nombre de la categoría debe tener entre 2 y 25 caracteres.")
+	@Pattern(regexp = "^[A-ZÁÉÍÓÚÑ][a-záéíóúñA-Z]*$", message = "La categoria debe empezar con mayuscula y solo puede contener letras, tildes, ñ y espacios.")
 	private String name;
 
 	//bi-directional many-to-one association to FilmCategory
