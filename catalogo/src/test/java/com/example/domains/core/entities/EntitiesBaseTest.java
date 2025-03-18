@@ -49,7 +49,7 @@ package com.example.domains.core.entities;
  					() -> assertTrue(dummy.isInvalid(), "isInvalid"),
  					() -> assertEquals(3, dummy.getErrors().size(), "getErrors"),
  					() -> assertEquals(2, dummy.getErrorsFields().size(), "getErrorsFields"),
- 					() -> assertEquals("ERRORES: id: debe ser mayor que 0. nombre: el tamaño debe estar entre 2 y 10, no debe estar vacío.", dummy.getErrorsMessage(), "getErrorsMessage")
+ 					() -> assertEquals("ERRORES: id: must be greater than 0. nombre: must not be blank, size must be between 2 and 10.", dummy.getErrorsMessage(), "getErrorsMessage")
  					);
  		}
  		

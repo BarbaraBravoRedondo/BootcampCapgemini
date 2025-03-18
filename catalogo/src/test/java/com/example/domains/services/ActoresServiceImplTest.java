@@ -13,10 +13,13 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.junit.jupiter.api.DisplayName;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.boot.test.context.SpringBootTest;
+
 import java.util.Optional;
 import java.util.List;
 
 @ExtendWith(MockitoExtension.class)
+@SpringBootTest
 public class ActoresServiceImplTest {
 
     @Mock

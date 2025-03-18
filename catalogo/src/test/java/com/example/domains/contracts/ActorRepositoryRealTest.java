@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import com.example.domains.contracts.repositories.ActoresRepository;
 import com.example.test.utils.Lentos;
 
 @SpringBootTest
@@ -14,6 +15,7 @@ import com.example.test.utils.Lentos;
 class ActorRepositoryRealTest {
 	@Autowired
 	ActoresRepository dao;
+ 
 	
 	@Test
 	void test() {

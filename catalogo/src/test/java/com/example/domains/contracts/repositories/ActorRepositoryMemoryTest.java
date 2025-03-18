@@ -1,5 +1,4 @@
-package com.example.domains.contracts;
-
+package com.example.domains.contracts.repositories;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -8,6 +7,7 @@ import java.sql.Timestamp;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
@@ -15,12 +15,13 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import com.example.domains.contracts.repositories.ActoresRepository;
 import com.example.domains.entities.Actor;
 import com.example.test.utils.Lentos;
-
 @DataJpaTest
 @Lentos
+
 class ActorRepositoryMemoryTest {
 	@Autowired
 	private TestEntityManager em;
+
 
 	@Autowired
 	ActoresRepository dao;

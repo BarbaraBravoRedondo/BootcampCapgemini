@@ -12,6 +12,8 @@ import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
+import jakarta.transaction.Transactional;
+
 @Service
 public class ActoresServiceImpl implements ActoresService {
 	private ActoresRepository dao;
@@ -39,10 +41,11 @@ public class ActoresServiceImpl implements ActoresService {
 		 if (dao.existsById(item.getActorId())) {
 		        throw new DuplicateKeyException("Actor con ID " + item.getActorId() + " ya existe.");
 		    }
+		  return dao.save(item);
 		
-		return null;
 	}
-
+	
+	 @Transactional
 	@Override
 	public Actor modify(Actor item) throws NotFoundException, InvalidDataException {
 	   
@@ -73,6 +76,7 @@ public class ActoresServiceImpl implements ActoresService {
       
 
         dao.deleteById(id);  }
+	
 	@Override
 	public void repartePremios() {
 		 System.out.println("Repartiendo premios...");
