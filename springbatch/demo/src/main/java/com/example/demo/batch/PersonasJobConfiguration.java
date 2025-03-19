@@ -43,6 +43,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import com.example.demo.models.Persona;
 import com.example.demo.models.PersonaDTO;
+import com.example.demo.models.PhotoDTO;
 import com.thoughtworks.xstream.security.AnyTypePermission;
 
 @Configuration
@@ -219,32 +220,32 @@ public class PersonasJobConfiguration {
 
 	// Custom ItemStream
 
-//	@Bean
-//	Job photoJob(PhotoRestItemReader photoRestItemReader, JdbcCursorItemReader<Persona> personaDBItemReader) {
-//		String[] headers = new String[] { "id", "author", "width", "height", "url", "download_url" };
-//		
-//		return new JobBuilder("photoJob", jobRepository)
-//				.incrementer(new RunIdIncrementer())
-//				.start(new StepBuilder("photoStep1", jobRepository)
-//						.<PhotoDTO, PhotoDTO>chunk(100, transactionManager).reader(photoRestItemReader)
-//						.writer(new FlatFileItemWriterBuilder<PhotoDTO>().name("photoCSVItemWriter")
-//								.resource(new FileSystemResource("output/photoData.csv"))
-//								.headerCallback(new FlatFileHeaderCallback() {
-//									public void writeHeader(Writer writer) throws IOException {
-//										writer.write(String.join(",", headers));
-//									}
-//								}).lineAggregator(new DelimitedLineAggregator<PhotoDTO>() {
-//									{
-//										setDelimiter(",");
-//										setFieldExtractor(new BeanWrapperFieldExtractor<PhotoDTO>() {
-//											{
-//												setNames(headers);
-//											}
-//										});
-//									}
-//								}).build())
-//						.build())
-//				.build();
-//	}
+	@Bean
+	Job photoJob(PhotoRestItemReader photoRestItemReader, JdbcCursorItemReader<Persona> personaDBItemReader) {
+		String[] headers = new String[] { "id", "author", "width", "height", "url", "download_url" };
+		
+		return new JobBuilder("photoJob", jobRepository)
+				.incrementer(new RunIdIncrementer())
+				.start(new StepBuilder("photoStep1", jobRepository)
+						.<PhotoDTO, PhotoDTO>chunk(100, transactionManager).reader(photoRestItemReader)
+						.writer(new FlatFileItemWriterBuilder<PhotoDTO>().name("photoCSVItemWriter")
+								.resource(new FileSystemResource("output/photoData.csv"))
+								.headerCallback(new FlatFileHeaderCallback() {
+									public void writeHeader(Writer writer) throws IOException {
+										writer.write(String.join(",", headers));
+									}
+								}).lineAggregator(new DelimitedLineAggregator<PhotoDTO>() {
+									{
+										setDelimiter(",");
+										setFieldExtractor(new BeanWrapperFieldExtractor<PhotoDTO>() {
+											{
+												setNames(headers);
+											}
+										});
+									}
+								}).build())
+						.build())
+				.build();
+	}
 
 }

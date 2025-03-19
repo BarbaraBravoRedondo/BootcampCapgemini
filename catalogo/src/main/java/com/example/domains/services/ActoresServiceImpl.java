@@ -1,16 +1,22 @@
 package com.example.domains.services;
 
+
+
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
-
 import com.example.domains.contracts.repositories.ActoresRepository;
 import com.example.domains.contracts.services.ActoresService;
 import com.example.domains.entities.Actor;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 
 import jakarta.transaction.Transactional;
 
@@ -81,6 +87,30 @@ public class ActoresServiceImpl implements ActoresService {
 	public void repartePremios() {
 		 System.out.println("Repartiendo premios...");
 
+	}
+	@Override
+	public <T> List<T> getByProjection(Class<T> type) {
+		return dao.findAllBy(type);
+	}
+
+	@Override
+	public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
+		return dao.findAllBy(sort, type);
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
+		return dao.findAllBy(pageable, type);
+	}
+
+	@Override
+	public Iterable<Actor> getAll(Sort sort) {
+		return dao.findAll(sort);
+	}
+
+	@Override
+	public Page<Actor> getAll(Pageable pageable) {
+		return dao.findAll(pageable);
 	}
 
 }

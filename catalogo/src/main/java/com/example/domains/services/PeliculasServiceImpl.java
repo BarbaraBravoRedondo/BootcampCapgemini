@@ -1,6 +1,11 @@
 package com.example.domains.services;
 
 import java.util.List;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
@@ -9,6 +14,7 @@ import com.example.domains.contracts.repositories.PeliculasRepository;
 import com.example.domains.contracts.services.PeliculasService;
 import com.example.domains.entities.Actor;
 import com.example.domains.entities.Film;
+import com.example.domains.entities.dtos.FilmShort;
 import com.example.exceptions.DuplicateKeyException;
 import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
@@ -25,6 +31,14 @@ public class PeliculasServiceImpl implements PeliculasService {
 	public List<Film> getAll() {
 		return dao.findAll();
 	}
+
+    @Autowired
+    private PeliculasRepository filmRepository;
+
+   
+    public List<FilmShort> getFilmsShort() {
+        return filmRepository.findAllFilmShort();
+    }
 
 	@Override
 	public Optional<Film> getOne(Integer id) {
@@ -71,6 +85,31 @@ public class PeliculasServiceImpl implements PeliculasService {
      
 
         dao.deleteById(id);  }
+	
+	@Override
+	public <T> List<T> getByProjection(Class<T> type) {
+		return dao.findAllBy(type);
+	}
+
+	@Override
+	public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
+		return dao.findAllBy(sort, type);
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
+		return dao.findAllBy(pageable, type);
+	}
+
+	@Override
+	public Iterable<Film> getAll(Sort sort) {
+		return dao.findAll(sort);
+	}
+
+	@Override
+	public Page<Film> getAll(Pageable pageable) {
+		return dao.findAll(pageable);
+	}
 
 
 }

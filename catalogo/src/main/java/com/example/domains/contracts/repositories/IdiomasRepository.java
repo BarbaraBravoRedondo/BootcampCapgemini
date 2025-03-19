@@ -7,9 +7,10 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import com.example.domains.core.contracts.repositories.RepositoryWithProjections;
 import com.example.domains.entities.Language;
 
-public interface IdiomasRepository extends JpaRepository<Language, Integer>, JpaSpecificationExecutor<Language> {
+public interface IdiomasRepository extends JpaRepository<Language, Integer>, JpaSpecificationExecutor<Language>,RepositoryWithProjections {
 	List<Language> findByName(String name);
 
 	List<Language> findTop5ByNameStartingWith(String prefijo, Sort orderBy);
@@ -19,7 +20,7 @@ public interface IdiomasRepository extends JpaRepository<Language, Integer>, Jpa
 	@Query(value = "SELECT a FROM Language a WHERE a.languageId > ?1")
 	List<Language> findlastUpdateJPQL(int id);
 
-	@Query(value = "SELECT O* FROM language a WHERE a.language_id > :id", nativeQuery = true)
+	@Query(value = "SELECT * FROM language a WHERE a.language_id > :id", nativeQuery = true)
 	List<Language> findNovedadesSQL(int id);
 
 	@Query("SELECT l FROM Language l LEFT JOIN FETCH l.films f LEFT JOIN FETCH l.filmsVO v")

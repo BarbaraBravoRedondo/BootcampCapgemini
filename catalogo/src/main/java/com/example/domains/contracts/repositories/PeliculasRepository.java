@@ -7,9 +7,11 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 
+import com.example.domains.core.contracts.repositories.RepositoryWithProjections;
 import com.example.domains.entities.Film;
+import com.example.domains.entities.dtos.FilmShort;
 
-public interface PeliculasRepository  extends JpaRepository<Film, Integer>, JpaSpecificationExecutor<Film> {
+public interface PeliculasRepository  extends JpaRepository<Film, Integer>, JpaSpecificationExecutor<Film>, RepositoryWithProjections{
 	List<Film> findTop5ByTitleStartingWithOrderByTitleDesc(String prefijo);
 	List<Film> findTop5ByTitleStartingWith(String prefijo, Sort orderBy);
 	
@@ -18,5 +20,7 @@ public interface PeliculasRepository  extends JpaRepository<Film, Integer>, JpaS
     List<Film> findDescriptionJPQL(int id);
     @Query(value = "SELECT * FROM film a WHERE a.film_id > :id", nativeQuery = true)
     List<Film> findNovedadesSQL(int id);
+    @Query("SELECT f FROM Film f")
+    List<FilmShort> findAllFilmShort();
 
 }

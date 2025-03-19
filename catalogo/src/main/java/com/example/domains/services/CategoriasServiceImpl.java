@@ -1,7 +1,12 @@
 package com.example.domains.services;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+
 
 import java.util.List;
 import java.util.Optional;
+
 
 import org.springframework.stereotype.Service;
 
@@ -64,4 +69,28 @@ public class CategoriasServiceImpl implements CategoriasService {
     public void deleteById(Integer id) {
         dao.deleteById(id);
     }
+    @Override
+	public <T> List<T> getByProjection(Class<T> type) {
+		return dao.findAllBy(type);
+	}
+
+	@Override
+	public <T> Iterable<T> getByProjection(Sort sort, Class<T> type) {
+		return dao.findAllBy(sort, type);
+	}
+
+	@Override
+	public <T> Page<T> getByProjection(Pageable pageable, Class<T> type) {
+		return dao.findAllBy(pageable, type);
+	}
+
+	@Override
+	public Iterable<Category> getAll(Sort sort) {
+		return dao.findAll(sort);
+	}
+
+	@Override
+	public Page<Category> getAll(Pageable pageable) {
+		return dao.findAll(pageable);
+	}
 }

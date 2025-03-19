@@ -11,6 +11,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 import com.example.domains.contracts.repositories.ActoresRepository;
 import com.example.domains.contracts.services.ActoresService;
+import com.example.domains.contracts.services.IdiomasService;
 import com.example.domains.entities.Actor;
 
 
@@ -28,11 +29,12 @@ public class CatalogoApplication implements CommandLineRunner {
 	
 
 	
+//	@Autowired
+//	private ActoresService srv;
+//	@Autowired
+//   private ActoresRepository dao;
 	@Autowired
-	private ActoresService srv;
-	@Autowired
-   
-private ActoresRepository dao;
+    private IdiomasService dao;
 	private void ejemplosDatos() {
 		//var actor = new Actor(0,"Pepito","Grillo");
 //		var item =dao.findById(204);
@@ -48,11 +50,17 @@ private ActoresRepository dao;
 //		dao.findTop5ByFirstNameStartingWithOrderByLastNameDesc("P").forEach(System.err::println);
 //		dao.findAll((root, query, builder) -> builder.lessThanOrEqualTo(root.get("actorId"), 5))
 //		   .forEach(System.err::println);
-		 var actor = new Actor(0, "PEPITO","CaANOVA");
- 		 if(actor.isValid())
- 			 dao.save(actor);
- 		 else {
- 			System.err.println(actor.getErrorsMessage());}
+//		 var actor = new Actor(0, "PEPITO","CaANOVA");
+// 		 if(actor.isValid())
+// 			 dao.save(actor);
+// 		 else {
+// 			System.err.println(actor.getErrorsMessage());}
+ 		 
+ 	    System.out.println("Imprimiendo todos los idiomas...");
+        dao.getAll().forEach(language -> 
+            System.out.println("Idioma: " + language.getLanguageId() + " - " + language.getName())
+        );
+ 		 
  		}
 //		srv.getAll().forEach(System.err::println);
 //		var item =srv.getOne(1);
