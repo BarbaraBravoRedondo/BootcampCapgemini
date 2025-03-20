@@ -2,44 +2,34 @@ package com.example.domains.entities.dtos;
 
 import com.example.domains.entities.Language;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonView;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Schema(name = "Language", description = "Datos del idioma")
 public class LanguageDTO {
-
+    
     @JsonProperty("id")
-    @JsonView(Language.Partial.class)
     private int languageId;
 
-    @JsonProperty("idioma")
-    @JsonView(Language.Partial.class)
+    @NotBlank
+    @Size(min = 1, max = 20)
+    @Schema(description = "Nombre del idioma", example = "Español", required = true, minLength = 1, maxLength = 20)
     private String name;
 
-    public LanguageDTO() {
+   
+    public static LanguageDTO from(Language source) {
+        return new LanguageDTO(source.getLanguageId(), source.getName());
     }
 
-    public LanguageDTO(int languageId, String name) {
-        this.languageId = languageId;
-        this.name = name;
-    }
 
-    public int getLanguageId() {
-        return languageId;
-    }
-
-    public void setLanguageId(int languageId) {
-        this.languageId = languageId;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "LanguageDTO [languageId=" + languageId + ", name=" + name + "]";
+    public static Language from(LanguageDTO source) {
+        return new Language(source.getLanguageId(), source.getName());
     }
 }
