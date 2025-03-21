@@ -1,10 +1,11 @@
 package com.example.application.resource;
 
-import java.awt.print.Pageable;
+
 import java.net.URI;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -27,11 +28,8 @@ import com.example.exceptions.NotFoundException;
 
 import org.springdoc.core.annotations.ParameterObject;
 
-import org.springframework.data.web.PagedModel;
-
 import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.transaction.Transactional;
@@ -49,15 +47,15 @@ public class ActoresResource {
 		super();
 		this.srv = srv;
 	}
-	@Hidden
-//	@GetMapping
+
+//
 //	public List<ActorDTO> getAll(Pageable pageable) {
 //		return srv.getByProjection(ActorDTO.class);
 //	}
 	@GetMapping(params = { "page" })
  	@Operation(summary = " actores paginados")
- 	public List<ActorDTO> getAll(@ParameterObject Pageable pageable) {
- 		return srv.getByProjection(ActorDTO.class);
+ 	public Page<ActorDTO> getAll(@ParameterObject Pageable pageable) {
+ 		return srv.getByProjection(pageable , ActorDTO.class);
  	}
 	@GetMapping(path = "/{id}")
 	public ActorDTO getOne(@PathVariable int id) throws NotFoundException {

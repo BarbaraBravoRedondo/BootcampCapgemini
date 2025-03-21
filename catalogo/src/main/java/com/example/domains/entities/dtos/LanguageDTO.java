@@ -11,13 +11,13 @@ import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
-@NoArgsConstructor
+
 @Schema(name = "Language", description = "Datos del idioma")
 public class LanguageDTO {
-    
+	@Schema(name="id", description="id idioma")
     @JsonProperty("id")
     private int languageId;
-
+    @JsonProperty("idioma")
     @NotBlank
     @Size(min = 1, max = 20)
     @Schema(description = "Nombre del idioma", example = "Español", required = true, minLength = 1, maxLength = 20)

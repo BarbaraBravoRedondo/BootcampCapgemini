@@ -9,6 +9,7 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
+@Schema(name = "Categorias", description = "tipos de categorias")
 public class CategoryDTO {
     @JsonProperty("id")
     @Schema(description = "Id", example = "2", required=true)

@@ -11,22 +11,7 @@ import com.example.domains.core.contracts.repositories.RepositoryWithProjections
 import com.example.domains.entities.Language;
 
 public interface IdiomasRepository extends JpaRepository<Language, Integer>, JpaSpecificationExecutor<Language>,RepositoryWithProjections {
-	List<Language> findByName(String name);
 
-	List<Language> findTop5ByNameStartingWith(String prefijo, Sort orderBy);
 
-	List<Language> findBylanguageIdGreaterThan(int id);
-
-	@Query(value = "SELECT a FROM Language a WHERE a.languageId > ?1")
-	List<Language> findlastUpdateJPQL(int id);
-
-	@Query(value = "SELECT * FROM language a WHERE a.language_id > :id", nativeQuery = true)
-	List<Language> findNovedadesSQL(int id);
-
-	@Query("SELECT l FROM Language l LEFT JOIN FETCH l.films f LEFT JOIN FETCH l.filmsVO v")
-	List<Language> findAllLanguagesWithFilms();
-
-	@Query("SELECT DISTINCT l FROM Language l JOIN l.films f WHERE f.language = ?1 ORDER BY l.name")
-	List<Language> findLanguagesByFilmLanguage(Language language);
 
 }

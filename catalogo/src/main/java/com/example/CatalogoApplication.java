@@ -30,11 +30,11 @@ import jakarta.transaction.Transactional;
 
 @OpenAPIDefinition(
         info = @Info(title = "Microservicio: Demos",  version = "1.0",
-                description = "**Demos** de Microservicios.",
+                description = "Catologo Project",
                 license = @License(name = "Apache 2.0", url = "https://www.apache.org/licenses/LICENSE-2.0.html"),
-                contact = @Contact(name = "Javier Martín", url = "https://github.com/jmagit", email = "support@example.com")
+                contact = @Contact(name = "Barbara Bravo", url = "https://github.com/BarbaraBravoRedondo/BootcampCapgemini", email = "support@example.com")
         ),
-        externalDocs = @ExternalDocumentation(description = "Documentación del proyecto", url = "https://github.com/jmagit/curso")
+        externalDocs = @ExternalDocumentation(description = "Documentación del proyecto", url = "https://github.com/BarbaraBravoRedondo/BootcampCapgemini")
 )
 
 @SpringBootApplication

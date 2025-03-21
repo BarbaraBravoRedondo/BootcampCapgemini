@@ -25,9 +25,6 @@ public class Category implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@NotBlank
-	@NotNull(message = "El ID de la categoria no puede ser nulo.")
-	@Positive(message = "El ID de la categoria debe ser positivo.")
 	@Column(name="category_id", unique=true, nullable=false)
 	private int categoryId;
 
@@ -52,7 +49,9 @@ public class Category implements Serializable {
 	}
 
 	
-
+	public  Category() {
+		
+	}
 	public int getCategoryId() {
 		return this.categoryId;
 	}

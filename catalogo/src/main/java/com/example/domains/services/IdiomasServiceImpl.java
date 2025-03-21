@@ -31,18 +31,11 @@ public class IdiomasServiceImpl implements IdiomasService {
 //	public List<Language> getAll() {
 //		return dao.findAll();
 //	}
-	@Transactional
+
 	@Override
 	public List<Language> getAll() {
-	    System.out.println("Llamando a getAll()...");
-	    List<Language> languages = dao.findAll();
+		 return dao.findAll();
 
-	    // Imprimir todos los idiomas que obtenemos de la base de datos
-	    for (Language language : languages) {
-	        System.out.println("Idioma: " + language.getLanguageId() + " - " + language.getName());
-	    }
-
-	    return languages;
 	}
 	@Override
 	public Optional<Language> getOne(Integer id) {

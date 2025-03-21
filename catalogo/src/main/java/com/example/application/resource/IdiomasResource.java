@@ -2,11 +2,11 @@ package com.example.application.resource;
 
 
 
-import java.awt.print.Pageable;
+
 import java.net.URI;
 import java.util.List;
 
-import org.springdoc.core.annotations.ParameterObject;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -21,7 +21,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import com.example.domains.contracts.services.IdiomasService;
-import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.LanguageDTO;
 import com.example.exceptions.BadRequestException;
 import com.example.exceptions.DuplicateKeyException;
@@ -46,6 +45,7 @@ public class IdiomasResource {
         this.srv = srv;
     }
 
+    
 	@GetMapping
  	
  	public List<LanguageDTO> getAll() {
