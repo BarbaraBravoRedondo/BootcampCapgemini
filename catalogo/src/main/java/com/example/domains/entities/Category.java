@@ -9,6 +9,7 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -30,7 +31,7 @@ public class Category implements Serializable {
 
 	@Column(name="last_update", insertable=false, updatable=false, nullable=false)
 	@PastOrPresent
-	private Timestamp lastUpdate;
+	private Date lastUpdate;
 
 	@Column(nullable=false, length=25)
 	@NotBlank(message = "El nombre de la categoria no puede estar vacío.")
@@ -60,11 +61,11 @@ public class Category implements Serializable {
 		this.categoryId = categoryId;
 	}
 
-	public Timestamp getLastUpdate() {
+	public Date getLastUpdate() {
 		return this.lastUpdate;
 	}
 
-	public void setLastUpdate(Timestamp lastUpdate) {
+	public void setLastUpdate(Date lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
 

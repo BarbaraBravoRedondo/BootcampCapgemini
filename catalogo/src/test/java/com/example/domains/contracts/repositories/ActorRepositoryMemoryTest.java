@@ -3,6 +3,7 @@ package com.example.domains.contracts.repositories;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+import java.sql.Date;
 import java.sql.Timestamp;
 
 import org.junit.jupiter.api.BeforeEach;
