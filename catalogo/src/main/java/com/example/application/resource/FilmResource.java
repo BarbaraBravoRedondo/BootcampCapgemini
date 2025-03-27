@@ -1,10 +1,24 @@
 package com.example.application.resource;
 
+
+
 import java.net.URI;
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-import org.springdoc.core.converters.models.Pageable;
+import org.springdoc.core.annotations.ParameterObject;
+import org.springdoc.core.converters.models.PageableAsQueryParam;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,100 +26,226 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+
 import com.example.domains.contracts.services.PeliculasService;
+import com.example.domains.entities.Category;
+import com.example.domains.entities.Film;
+import com.example.domains.entities.Film.Rating;
 import com.example.domains.entities.dtos.ActorDTO;
 import com.example.domains.entities.dtos.FilmDTO;
+import com.example.domains.entities.dtos.FilmEditDTO;
+import com.example.domains.entities.dtos.FilmShort;
+
+
 import com.example.exceptions.BadRequestException;
-import com.example.exceptions.DuplicateKeyException;
-import com.example.exceptions.InvalidDataException;
 import com.example.exceptions.NotFoundException;
 
+import io.swagger.v3.oas.annotations.Hidden;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.Pattern;
 
 @RestController
-@RequestMapping("/peliculas/v1")
-@Tag(name = "film-service", description = "Gestión de películas")
+@Tag(name = "peliculas-service", description = "Gestion de peliculas")
+@RequestMapping(path = "/peliculas/v1")
 public class FilmResource {
+	@Autowired
+	private PeliculasService srv;
 
-    private final PeliculasService srv;
+	@Hidden
+	@GetMapping(params = "page")
+	public PagedModel<FilmShort> getAll(Pageable pageable, @RequestParam(defaultValue = "short") String mode) {
+		return new PagedModel<FilmShort>(srv.getByProjection(pageable, FilmShort.class));
+	}
 
-    public FilmResource(PeliculasService srv) {
-        this.srv = srv;
-    }
+	@Operation(summary = "Lista de las peliculas", 
+			description = "Obtiene la lista de peliculas en formato corto o detallado, se puede paginar.",
+			parameters = {
+					@Parameter(in = ParameterIn.QUERY, name = "mode", required = false, description = "Formato de las peliculas", 
+								schema = @Schema(type = "string", allowableValues = {"details", "short" }, defaultValue = "short")) }, 
+			responses = {
+					@ApiResponse(responseCode = "200", description = "OK", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, 
+							schema = @Schema(anyOf = {
+									FilmShort.class, FilmDTO.class }))) })
+	@GetMapping(params = { "page", "mode=details" })
+	@PageableAsQueryParam
+	@Transactional
+	public Page<FilmDTO> getAllDetailsPage(@Parameter(hidden = true) Pageable pageable,
+			@RequestParam(defaultValue = "short") String mode) {
+		var content = srv.getAll(pageable);
+		return new PageImpl<>(content.getContent().stream().map(item -> FilmDTO.from(item)).toList(), pageable,
+				content.getTotalElements());
+	}
 
-    @GetMapping(params = { "page" })
-    @Operation(summary = "Obtener todas las películas con paginación")
-    public List<FilmDTO> getAll(@Parameter(description = "Parámetros de paginación") Pageable pageable) {
-        return srv.getByProjection(FilmDTO.class);
-    }
+	@Hidden
+	@GetMapping
+	public List<FilmShort> getAll(@RequestParam(defaultValue = "short") String mode) {
+		return srv.getByProjection(FilmShort.class);
+	}
 
-    @GetMapping(path = "/{id}")
-    @Operation(summary = "Obtener una película por ID")
-    @ApiResponse(responseCode = "200", description = "Película encontrada exitosamente")
-    @ApiResponse(responseCode = "404", description = "Película no encontrada")
-    public FilmDTO getOne(@PathVariable int id) throws NotFoundException {
-        var item = srv.getOne(id);
-        if (item.isEmpty()) {
-            throw new NotFoundException("No se encontró la película con id " + id);
-        }
-        return FilmDTO.from(item.get());
-    }
+	@Hidden
+	@GetMapping(params = "mode=details")
+	public List<FilmDTO> getAllDetails(
 
-    @PostMapping
-    @Operation(summary = "Crear una nueva película")
-    @ApiResponse(responseCode = "201", description = "Película creada exitosamente")
-    public ResponseEntity<Object> create(@Valid @RequestBody FilmDTO item) throws BadRequestException, DuplicateKeyException, InvalidDataException {
-        var newItem = srv.add(FilmDTO.from(item));
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(newItem.getFilmId()).toUri();
-        return ResponseEntity.created(location).build();
-    }
+			@RequestParam(defaultValue = "short") String mode) {
+		return srv.getAll().stream().map(item -> FilmDTO.from(item)).toList();
+	}
 
-    @PutMapping("/{id}")
-    @Operation(summary = "Actualizar una película existente")
-    @ApiResponse(responseCode = "204", description = "Película actualizada exitosamente")
-    @ApiResponse(responseCode = "400", description = "Solicitud incorrecta, el id no coincide")
-    @ApiResponse(responseCode = "404", description = "Película no encontrada")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void update(@PathVariable int id, @Valid @RequestBody FilmDTO item) throws BadRequestException, NotFoundException, InvalidDataException {
-        if (item.getFilmId() != id) {
-            throw new BadRequestException("El id de la película no coincide con el recurso a modificar");
-        }
-        srv.modify(FilmDTO.from(item));
-    }
+	record Search(
+			@Schema(description = "Que el titulo contenga")
+			String title, 
+			@Schema(description = "Duración mínima de la pelicula")
+			Integer minlength, 
+			@Schema(description = "Duración máxima de la pelicula")
+			Integer maxlength, 
+			@Schema(description = "La clasificación por edades asignada a la película", allowableValues = {"G", "PG", "PG-13", "R", "NC-17"})
+			@Pattern(regexp = "^(G|PG|PG-13|R|NC-17)$")
+			String rating,
+			@Schema(description = "Formato de la respuesta", type = "string", allowableValues = {
+					"details", "short" }, defaultValue = "short")
+			String mode
+			) {}
 
-    @DeleteMapping("/{id}")
-    @Operation(summary = "Eliminar una película por ID")
-    @ApiResponse(responseCode = "204", description = "Película eliminada exitosamente")
-    @ApiResponse(responseCode = "404", description = "Película no encontrada")
-    @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void delete(@PathVariable int id) {
-        srv.deleteById(id);
-    }
+	
 
-    @GetMapping(path = "/{id}/actores")
-    @Operation(summary = "Obtener los actores de una película")
-    @ApiResponse(responseCode = "200", description = "Actores encontrados exitosamente")
-    @ApiResponse(responseCode = "404", description = "Película no encontrada")
-    @Transactional
-    public List<ActorDTO> getActors(@PathVariable int id) throws NotFoundException {
-        var item = srv.getOne(id);
-        if (item.isEmpty()) {
-            throw new NotFoundException("No se encontró la película con id " + id);
-        }
-        return item.get().getFilmActors().stream()
-                .map(o -> ActorDTO.from(o.getActor()))
-                .toList();
-    }
+	@GetMapping(path = "/{id}", params = "mode=short")
+	public FilmDTO getOneCorto(
+			@Parameter(description = "Id de la pelicula", required = true) 
+			@PathVariable 
+			int id,
+			@Parameter(required = false, allowEmptyValue = true, schema = @Schema(type = "string", allowableValues = {
+					"details", "short", "edit" }, defaultValue = "edit")) 
+			@RequestParam(required = false, defaultValue = "edit") 
+			String mode)
+			throws Exception {
+		Optional<Film> rslt = srv.getOne(id);
+		if (rslt.isEmpty())
+			throw new NotFoundException();
+		return FilmDTO.from(rslt.get());
+	}
+
+	@GetMapping(path = "/{id}", params = "mode=details")
+	public FilmDTO getOneDetalle(
+			@Parameter(description = "Id de la pelicula", required = true) @PathVariable int id,
+			@Parameter(required = false, schema = @Schema(type = "string", allowableValues = { "details", "short",
+					"edit" }, defaultValue = "edit")) @RequestParam(required = false, defaultValue = "edit") String mode)
+			throws Exception {
+		Optional<Film> rslt = srv.getOne(id);
+		if (rslt.isEmpty())
+			throw new NotFoundException();
+		return FilmDTO.from(rslt.get());
+	}
+
+	@Operation(summary = "Una pelicula", description = "Una pelicula por Id")
+	@GetMapping(path = "/{id}")
+	@ApiResponse(responseCode = "200", description = "Pelicula encontrada", content = @Content(schema = @Schema(oneOf = {
+			FilmShort.class, FilmDTO.class, FilmEditDTO.class })))
+	@ApiResponse(responseCode = "404", description = "Pelicula no encontrada", content = @Content(schema = @Schema(implementation = ProblemDetail.class)))
+	public FilmEditDTO getOneEditar(
+			@Parameter(description = "Id de la pelicula", required = true) 
+			@PathVariable 
+			int id,
+			@Parameter(required = false, schema = @Schema(type = "string", allowableValues = { "details", "short",
+					"edit" }, defaultValue = "edit")) 
+			@RequestParam(required = false, defaultValue = "edit") 
+			String mode)
+			throws Exception {
+		Optional<Film> rslt = srv.getOne(id);
+		if (rslt.isEmpty())
+			throw new NotFoundException();
+		return FilmEditDTO.from(rslt.get());
+	}
+
+	@Operation(summary = "Lista de los actores pot  pelicula")
+	@ApiResponse(responseCode = "200", description = "Pelicula encontrada")
+	@ApiResponse(responseCode = "404", description = "Pelicula no encontrada")
+	@GetMapping(path = "/{id}/reparto")
+	@Transactional
+	public List<ActorDTO> getFilms(
+			@Parameter(description = "Id de la pelicula", required = true) @PathVariable int id)
+			throws Exception {
+		Optional<Film> rslt = srv.getOne(id);
+		if (rslt.isEmpty())
+			throw new NotFoundException();
+		return rslt.get().getActors().stream().map(item -> ActorDTO.from(item)).toList();
+	}
+
+	@Operation(summary = "Lista de las categorias de la pelicula")
+	@ApiResponse(responseCode = "200", description = "Pelicula encontrada")
+	@ApiResponse(responseCode = "404", description = "Pelicula no encontrada")
+	@GetMapping(path = "/{id}/categorias")
+	@Transactional
+	public List<Category> getCategories(
+			@Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id)
+			throws Exception {
+		Optional<Film> rslt = srv.getOne(id);
+		if (rslt.isEmpty())
+			throw new NotFoundException();
+		return rslt.get().getCategories();
+	}
+
+	@GetMapping(path = "/clasificaciones")
+	@Operation(summary = "List de las clasificaciones por edades")
+	public List<Map<String, String>> getClasificaciones() {
+		return List.of(Map.of("key", "G", "value", "Todos los públicos"),
+				Map.of("key", "PG", "value", "Guía paternal sugerida"),
+				Map.of("key", "PG-13", "value", "Guía paternal estricta"), 
+				Map.of("key", "R", "value", "Restringido"),
+				Map.of("key", "NC-17", "value", "Prohibido para audiencia de 17 años y menos"));
+	}
+
+	@Operation(summary = "Añadir una nueva pelicula")
+	@ApiResponse(responseCode = "201", description = "Pelicula añadida")
+	@ApiResponse(responseCode = "404", description = "Pelicula no encontrada")
+	@PostMapping
+	@ResponseStatus(code = HttpStatus.CREATED)
+	@Transactional
+	public ResponseEntity<Object> add(@RequestBody() FilmEditDTO item) throws Exception {
+		Film newItem = srv.add(FilmEditDTO.from(item));
+		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+				.buildAndExpand(newItem.getFilmId()).toUri();
+		return ResponseEntity.created(location).build();
+	}
+
+	@Operation(summary = "Modificar una pelicula ", description = "Los identificadores deben coincidir")
+	@ApiResponse(responseCode = "200", description = "Pelicula encontrada")
+	@ApiResponse(responseCode = "404", description = "Pelicula no encontrada")
+//	@Transactional
+	@PutMapping(path = "/{id}")
+	public FilmEditDTO modify(
+			@Parameter(description = "Id de la pelicula", required = true) @PathVariable int id,
+			@Valid @RequestBody FilmEditDTO item) throws Exception {
+		if (item.getFilmId() != id)
+			throw new BadRequestException("No coinciden los identificadores");
+		return FilmEditDTO.from(srv.modify(FilmEditDTO.from(item)));
+	}
+
+	@Operation(summary = "Borrar una pelicula ")
+	@ApiResponse(responseCode = "204", description = "Pelicula borrada")
+	@ApiResponse(responseCode = "404", description = "Pelicula no encontrada")
+	@DeleteMapping(path = "/{id}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void delete(@Parameter(description = "Identificador de la pelicula", required = true) @PathVariable int id)
+			throws Exception {
+		srv.deleteById(id);
+	}
+ 
+
+
+
 }

@@ -30,28 +30,29 @@ public class FilmCategory implements Serializable {
 	@EmbeddedId
 	private FilmCategoryPK id;
 
-	@Column(name="last_update", insertable=false )
+	@Column(name="last_update", insertable = false, updatable = false)
 	private Timestamp lastUpdate;
 
 	//bi-directional many-to-one association to Category
 	@ManyToOne
-	@JoinColumn(name="category_id", nullable=false)
+	@JoinColumn(name="category_id", insertable=false, updatable=false)
 	@JsonManagedReference
 	private Category category;
 
 	//bi-directional many-to-one association to Film
 	@ManyToOne
-	@JoinColumn(name="film_id", nullable=false)
+	@JoinColumn(name="film_id", insertable=false, updatable=false)
 	@JsonManagedReference
 	private Film film;
 
-	public FilmCategory(Film film, Category category) {
- 		this.film = film;
- 		this.category = category;
- 	}
- 
 	public FilmCategory() {
- 	}
+	}
+
+	public FilmCategory(Film film, Category category) {
+		this.film = film;
+		this.category = category;
+	}
+
 	public FilmCategoryPK getId() {
 		return this.id;
 	}
@@ -85,12 +86,12 @@ public class FilmCategory implements Serializable {
 	}
 	
 	@PrePersist
- 	@PreUpdate
- 	void prePersiste() {
+	@PreUpdate
+	void prePersiste() {
 
- 		if (id == null) {
- 			setId(new FilmCategoryPK(film.getFilmId(), category.getCategoryId()));
- 		}
- 	}
+		if (id == null) {
+			setId(new FilmCategoryPK(film.getFilmId(), category.getCategoryId()));
+		}
+	}
 
 }

@@ -55,8 +55,8 @@ public class Language  extends AbstractEntity<Language> implements Serializable 
 
    
     @OneToMany(mappedBy="languageVO")
-    @JsonIgnore
  
+    @JsonIgnore
     private List<Film> filmsVO;
 
     public Language() {}
@@ -65,7 +65,7 @@ public class Language  extends AbstractEntity<Language> implements Serializable 
         this.languageId = languageId;
     }
 
-    public Language(int languageId, @NotBlank @Size(max = 20) String name) {
+    public Language(int languageId, String name) {
         this.languageId = languageId;
         this.name = name;
     }

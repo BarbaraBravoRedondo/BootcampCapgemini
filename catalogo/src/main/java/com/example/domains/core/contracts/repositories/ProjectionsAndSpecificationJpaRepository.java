@@ -12,7 +12,7 @@ import org.springframework.data.repository.NoRepositoryBean;
  
 @NoRepositoryBean
 public interface ProjectionsAndSpecificationJpaRepository<E, ID> 
-	extends JpaRepository<E, ID>, JpaSpecificationExecutor<E>, RepositoryWithProjections {
+	extends JpaRepository<E, ID>, JpaSpecificationExecutor<E>,RepositoryWithProjections {
 //	@RestResource(exported = false)
 <T> List<T> findAllBy(Class<T> type);
 //	@RestResource(exported = false)
