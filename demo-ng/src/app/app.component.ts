@@ -14,12 +14,13 @@ import { DemosComponent } from './demos/demos.component';
 export class AppComponent {
   title : string = 'world'
 
-  constructor(out:LoggerService){
+/*  constructor(out:LoggerService){
     out.error('Es un error');
     out.warn('Es un warn')
     out.info('Es una info')
     out.log('Es un log')
 
 
-  }
+  }*/
+
 }
