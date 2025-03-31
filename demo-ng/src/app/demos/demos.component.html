@@ -1,4 +1,12 @@
+<h1>Hola {{nombre()| uppercase}} 
+</h1>
 <p>
+    <input type="text" [(ngModel)]="nombre" placeholder="Escribe tu nombre" />
+    <input type="button" value="saludar" (click)="saluda()" />
+    <input type="button" value="despide" (click)="despide()" />
+    <input type="button" value="di algo" (click)="di('algo')" />
+    <input type="button" value="cambia" (click)="cambia()" />
+    
     <input type="button" value="Error" (click)="vm.add('Esto es una notificación de error')" >
     <input type="button" value="Warn" (click)="vm.add('Esta notificación es un aviso', 
     vm.NotificationType.warn)" >
@@ -7,3 +15,33 @@
     <input type="button" value="Log" (click)="vm.add('Para trazar con notificaciones', 
     vm.NotificationType.log)" >
     </p>
+    <p>{{resultado()}}</p>
+    <p>Fecha:{{fecha}}</p>
+    <p>Calcula:2+2={{2 + 2}} ={{calcula(2,2)| currency :'EUR':'symbol':'1.2-2'}}</p>
+    <p [textContent]="resultado()">esto se pierde</p>
+    <p [innerHTML]="resultado()">esto se pierde</p>
+    <p [hidden]="!visible()">ahora me ves</p>
+    <p [hidden]="invisible()">ahora me ves</p>
+        @if(visible()){
+            <p>ahora existo con flujo</p>
+        }
+    <p [ngClass]="estetica()">Lorem  ipsum sjhdgasjdhsajdhasidjhiasuhfiasuhfaisushf</p>
+    <p [class.semivisible]="invisible()">Ahora me ves bien</p>
+
+    <ul>
+        @for(item of list(); track item.id){
+            <li [style.background-color]="$odd ? 'LightBlue' :'Lavender'">{{item.nombre}}({{item.id}})[Elemento {{$index +1 }} de {{list().length}}]</li>
+        }
+    </ul>
+    <p>
+        <select  [(ngModel)]="idProvincia">
+            @for(item of list()| slice:-5; track item.id){
+                <option [value]="item.id"> {{item.nombre}}</option>
+            }
+        </select>
+   
+    Seleccionado: {{idProvincia()}}
+    <input type="text" value="Tabarnia" #txtProvincia> 
+    <input type="button" value="Añadir" (click)="add(txtProvincia.value); txtProvincia.value=''; txtProvincia.focus()">
+     </p>
+     <p>{{list()|json }}</p>

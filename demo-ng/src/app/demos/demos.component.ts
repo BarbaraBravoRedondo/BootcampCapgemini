@@ -1,10 +1,12 @@
 import { Component, computed, OnDestroy, OnInit, signal } from '@angular/core';
 import { NotificationService, NotificationType } from '../common-services';
 import { Unsubscribable } from 'rxjs';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-demos',
-  imports: [],
+  imports: [ FormsModule, CommonModule],
   templateUrl: './demos.component.html',
   styleUrl: './demos.component.css'
 })
@@ -29,10 +31,10 @@ this.date = new Date (value);
 
  
 saluda(){
-  this.resultado.set('Hola ${this.nombre()}')
+  this.resultado.set(`Hola ${this.nombre()}`)
 }
 despide(){
-  this.resultado.set('Adios ${this.nombre()}')
+  this.resultado.set(`Adios ${this.nombre()}`)
 }
 di(algo: string){
   this.resultado.set(`Di ${algo}`)

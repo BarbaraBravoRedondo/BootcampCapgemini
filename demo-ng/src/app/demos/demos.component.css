@@ -1,0 +1,17 @@
+
+.importante{color: chartreuse;   text-transform: cursive;
+
+}
+.urgent{color: brown;
+
+}
+.invisible{
+    text-decoration: underline;
+ 
+
+}
+.semivisible{
+    opacity: 0.5;
+    color: gray;
+
+}
