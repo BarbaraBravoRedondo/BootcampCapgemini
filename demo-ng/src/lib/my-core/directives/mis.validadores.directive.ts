@@ -83,7 +83,7 @@ export class TypeValidator implements Validator {
 
 // https://es.iban.com/estructura
 
-// eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+ 
 // export function ibanValidator(control: AbstractControl): { [key: string]: any } | null {
 //   if (!control.value) { return null; }
 //   return isIBAN(control.value.toString()) ? null : { iban: 'No es un IBAN valido' }
