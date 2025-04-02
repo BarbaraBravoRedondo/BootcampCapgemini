@@ -1,8 +1,9 @@
 
 
 export const environment = {
-    production:false,
-    ERROR_LEVEL:2,
-    apiUrl:'http://localhost:8010',
-    securityUrl:'http://localhost:8091'
-};
+    production: false,
+    ERROR_LEVEL: 99,
+    apiUrl: 'http://localhost:4321/api/',
+    securityApiURL: 'http://localhost:8091/',
+  
+  };

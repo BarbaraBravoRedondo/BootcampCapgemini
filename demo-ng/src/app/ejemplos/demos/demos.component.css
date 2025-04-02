@@ -1,0 +1,13 @@
+
+.importante{color: chartreuse;   
+ 
+
+}
+.urgente{  font-style: italic;
+
+}
+.semivisible{
+    opacity: 0.5;
+    color: gray;
+
+}
