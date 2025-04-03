@@ -1,0 +1,37 @@
+<header class="d-flex align-items-center bg-dark text-white">
+  <nav class="navbar navbar-expand-lg navbar-light bg-dark w-100">
+    <div class="container-fluid d-flex justify-content-between align-items-center">
+  
+      <div class="d-flex align-items-center">
+        <i class="fas fa-video logo me-2"></i>
+        <h1 class="m-0">PeliculiFlix</h1>
+      </div>
+      <button class="navbar-toggler navbar-dark" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasNavbarDark" aria-controls="offcanvasNavbarDark" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      
+      <div class="offcanvas offcanvas-end   text-bg-dark" tabindex="-1" id="offcanvasNavbarDark" aria-labelledby="offcanvasNavbarDarkLabel">
+        <div class="offcanvas-header">
+          <h5 class="offcanvas-title text-white" id="offcanvasNavbarDarkLabel">Menu</h5>
+          <button type="button" class="btn-close btn-close-black" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+          <ul class="navbar-nav justify-content-end flex-grow-1 pe-3 ">
+            <li class="nav-item">
+              <a class="nav-link " [routerLink]="['/actores']" routerLinkActive="active">Actores</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/idiomas']" routerLinkActive="active">Idiomas</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" [routerLink]="['/categorias']" routerLinkActive="active">Categorías</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link " [routerLink]="['/peliculas']" routerLinkActive="active">Películas</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+</header>

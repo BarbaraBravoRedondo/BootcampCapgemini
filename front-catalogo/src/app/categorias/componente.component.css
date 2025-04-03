@@ -1,0 +1,27 @@
+a {
+    display: flex;
+    align-items: center;
+    text-decoration: none; 
+    display: flex;
+    gap: 20px; 
+    
+  }
+  
+  .number-circle {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 40px; 
+    height: 40px;
+    border-radius: 50%; 
+    background-color: black; 
+    color: white;
+    font-size: 20px; 
+    margin-right: 10px; 
+  }
+  
+  .language {
+    font-size: 22px; 
+    color: black; 
+  }
+  

@@ -1,0 +1,23 @@
+<h1>Pelicula:</h1>
+@if(VM.Elemento) {
+<div class="row">
+<div class="col-xs-12 col-sm-6 col-md-6">
+<div class="well well-sm">
+<div class="row">
+<div class="col-sm-6 col-md-4">
+    <img src="https://picsum.photos/seed/{{VM.Elemento.id}}/75/75" alt="Imagen de película">
+</div>
+
+<div class="col-sm-6 col-md-8">
+<h4> {{VM.Elemento.title}} {{VM.Elemento.releaseYear}}</h4>
+
+<input class="btn btn-secondary" type="button" value="Volver" (click)="VM.cancel()">
+</div>
+</div>
+</div>
+</div>
+</div>
+
+} @else {
+<h2>Sin datos</h2>
+}

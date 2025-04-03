@@ -57,6 +57,11 @@ public class ActoresResource {
  	public Page<ActorDTO> getAll(@ParameterObject Pageable pageable) {
  		return srv.getByProjection(pageable , ActorDTO.class);
  	}
+	@GetMapping()
+ 	@Operation(summary = " actores paginados")
+ 	public List<ActorDTO> getAllAll(@ParameterObject Pageable pageable) {
+ 		return srv.getByProjection(ActorDTO.class);
+ 	}
 	@GetMapping(path = "/{id}")
 	public ActorDTO getOne(@PathVariable int id) throws NotFoundException {
 		var item = srv.getOne(id);

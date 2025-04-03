@@ -1,0 +1,38 @@
+<table class="table table-striped table-hover">
+    <thead>
+        <tr class="table-info">
+            <th class="display-4">Lista de idiomas:</th>
+            <th class="text-end">
+                
+                <button class="btn btn-success" routerLink="add"><i class="fas fa-plus"></i> Añadir</button>
+              
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @for (item of VM.Listado; track item.id) {
+        <tr>
+            <td>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-2">
+                            <img class="rounded-circle" src="https://robohash.org/{{item.id}}" alt="Foto de actor" width="75" height="75">
+                        </div>
+                        <div class="col-md-10">
+                            <a class="actor-name btn btn-link btn-lg px-0" routerLink="{{item.id}}/{{item.firstName}}-{{item.lastName}}">
+                                {{item.firstName}} {{item.lastName}}
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="align-middle text-end">
+                <div class="btn-group" role="group">
+                    <button class="btn btn-success" [routerLink]="[item.id, 'edit']"><i class="fas fa-pen"></i></button>
+                    <button class="btn btn-danger" (click)="VM.delete(item.id)"><i class="far fa-trash-alt"></i></button>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
